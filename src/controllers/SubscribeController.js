@@ -6,6 +6,8 @@ module.exports = {
     event.subscribes += 1;
     await event.save();
 
+    req.io.emit("subscribe", event);
+
     return res.json(event);
   }
 };

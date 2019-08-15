@@ -34,6 +34,8 @@ module.exports = {
       image: fileName
     });
 
+    req.io.emit("event", event);
+
     return res.json(event);
   }
 };

@@ -1,14 +1,22 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const cors = require("cors");
 require("custom-env").env();
 
 const app = express();
+const server = require("http").Server(app);
+const io = require("socket.io")(server);
 
-mongoose.connect(
-  "mongodb+srv://dba:dba1234@cluster0-vomcv.mongodb.net/hubeventos?retryWrites=true&w=majority",
-  { useNewUrlParser: true }
-);
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
+
+app.use((req, res, next) => {
+  req.io = io;
+
+  next();
+});
+
+app.use(cors());
 
 app.use(
   "/files",
@@ -17,4 +25,4 @@ app.use(
 
 app.use(require("./routes"));
 
-app.listen(3333);
+server.listen(3333);
